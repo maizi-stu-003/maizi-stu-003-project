@@ -1,0 +1,110 @@
+Imaging-1.1.7.tar.gz install
+
+今天在Python运行环境的服务器弄一个有关图像处理的程序时报这样的错：
+
+NameError: global name 'Image' is not defined
+
+import Image 了下，发现原来 Python
+并没有自带图像处理库，需要独立安装……查了下，Python常用的图像处理库叫PIL，可以使用
+pip 安装，不错～于是在 用virtualenv 里敲入 pip install PIL。
+
+安装很快完成，于是愉悦地刷新，等待程序的通过，结果又报错：
+
+IOError: decoder jpeg not available
+
+Google了下，发现通过 pip 安装的 PIL 不会安装 jpeg
+的解码器……检查了下安装日志，也有这样的说明：
+
+--------------------------------------------------------------------
+PIL 1.1.7 SETUP SUMMARY
+--------------------------------------------------------------------
+version      1.1.7
+platform      linux2 2.7.5 (default, Sep 18 2013, 09:53:07)
+    [GCC 4.1.2 20080704 (Red Hat 4.1.2-54)]
+--------------------------------------------------------------------
+*** TKINTER support not available
+*** JPEG support not available
+*** ZLIB (PNG/ZIP) support not available
+*** FREETYPE2 support not available
+*** LITTLECMS support not available
+--------------------------------------------------------------------
+To add a missing option, make sure you have the required
+library, and set the corresponding ROOT variable in the
+setup.py script.
+
+JPEG support not available…… jpg都不支持，这是闹哪样……
+
+于是只得手动安装了：
+
+wget http://effbot.org/downloads/Imaging-1.1.7.tar.gz
+
+tar xvfz Imaging-1.1.7.tar.gz
+
+下载并解压成功之后，到解压目录，找到 Imaging-1.1.7/setup.py
+这个文件，修改下面几行代码（默认TCL_ROOT的设置为NONE，这里要传到系统库的路径才行）：
+
+TCL_ROOT = "/usr/lib64/"
+JPEG_ROOT = "/usr/lib64/"
+ZLIB_ROOT = "/usr/lib64/"
+TIFF_ROOT = "/usr/lib64/"
+FREETYPE_ROOT = "/usr/lib64/"
+LCMS_ROOT = "/usr/lib64/"
+
+再进行安装前的检查：
+
+python /root/nowamagic_venv/Imaging-1.1.7/setup.py build_ext -i
+
+检查没问题，可以执行安装了：
+
+python /root/nowamagic_venv/Imaging-1.1.7/setup.py install
+
+安装成功：
+
+--------------------------------------------------------------------
+PIL 1.1.7 SETUP SUMMARY
+--------------------------------------------------------------------
+version      1.1.7
+platform      linux2 2.7.5 (default, Sep 18 2013, 09:53:07)
+              [GCC 4.1.2 20080704 (Red Hat 4.1.2-54)]
+--------------------------------------------------------------------
+*** TKINTER support not available
+--- JPEG support available
+--- ZLIB (PNG/ZIP) support available
+--- FREETYPE2 support available
+*** LITTLECMS support not available
+--------------------------------------------------------------------
+
+现在 jpg
+已经被支持了，程序也执行成功，这里简单记录一下过程，方便后来者。顺便附带测试程序，用
+Tornado 上传图片并生成缩略图：
+
+import time
+import tempfile
+import Image
+
+class AsciiImageProcessHandler(tornado.web.RequestHandler):
+    def post(self):
+
+        if self.request.files:
+            for f in self.request.files['image']:
+                rawname = f['filename']
+                dstname = str(int(time.time()))+'.'+rawname.split('.').pop()
+                thbname = "thumb_"+dstname
+
+                self.write( dstname )
+
+                tf = tempfile.NamedTemporaryFile()
+                tf.write(f['body'])
+                tf.seek(0)
+
+                # create normal file
+                # img = Image.open(src)
+                img = Image.open(tf.name)
+                img.thumbnail((920,920),resample=1)
+                img.save("./static/upload/asciiimg/"+dstname)
+
+                # create thumb file
+                img.thumbnail((100,100),resample=1)
+                img.save("./static/upload/asciiimg_tn/"+thbname)
+ 
+                tf.close()

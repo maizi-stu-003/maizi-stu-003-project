@@ -1,0 +1,60 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>验证邮箱</title>
+<link href="{% static 'css/base.css'  %}" rel="stylesheet">
+<link href="{% static 'css/microoh-v5.css'  %}" rel="stylesheet">
+<link href="{% static 'css/animate.css'  %}" rel="stylesheet">
+<link href="{% static 'css/develop.css'  %}" rel="stylesheet">
+<!--[if lt IE 9]>
+<script src="js/html5shiv.min.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+
+
+
+<header class="mobil-header">
+  <span>找回密码</span>
+</header>
+<div class="mobil-login-register">
+  <section class="box-login v5-input-txt" id="box-login">
+    <form method="get" action="{% url 'doverifyemail' %}" name="VerifyEmailForm" >
+        {% csrf_token %}
+    <ul>
+
+      <li class="form-group has-error"><input type="text" class="form-control" placeholder="请输入邮箱账号" name="email" id="email"></li>
+
+
+    </ul>
+    <div>
+      <button type="button" class="btn btn-micv5 btn-block" onclick="document.VerifyEmailForm.submit()" id="button">提交</button>
+    </div>
+
+    </form>
+
+    <div class="tips-error bg-danger" name="tips" id="tips">{{reason}}</div>
+  </section>
+</div>
+
+<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+<script src="{% static 'js/jquery-migrate-1.2.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/microoh-v5.js' %}"></script>
+<script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+<script type="text/javascript">
+$(function() {
+  
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {% block title %}
+        <title></title>
+    {% endblock %}
+    {% block style %}
+<link href="{% static 'css/base.css' %}" rel="stylesheet">
+<link href="{% static 'css/microoh-v5.css' %}" rel="stylesheet">
+<link href="{% static 'css/animate.css' %}" rel="stylesheet">
+<link href="{% static 'css/develop.css' %}" rel="stylesheet">
+<link href="{% static 'css/course.css' %}" rel="stylesheet">
+<!--[if lt IE 9]>
+<script src="{% static 'js/html5shiv.min.js' %}"></script>
+<script src="{% static 'js/respond.min.js' %}"></script>
+<![endif]-->
+    {% endblock %}
+{% block scripts %}
+<script type="text/javascript" src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-migrate-1.2.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.iframe-transport.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.fileupload.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/microoh-v5.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.jscrollpane.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jPages.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/course.js' %}"></script>
+{% endblock %}
+</head>
+
+<body>
+{% block body %}
+<div class="microoh-main">
+    {% block header %}
+  <header class="navbar navbar-default navbar-fixed-top navbar-v5" data-spy="affix" data-offset-top="64">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="microoh-navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="" title="麦子学院"><img src="{% static 'images/logo.png' %}" class="hidden"><img src="{% static 'images/logo-font.png' %}"></a>
+      </div>
+      <div class="collapse navbar-collapse" id="microoh-navbar-collapse">
+        <ul class="nav navbar-nav navbar-left">
+          <li><a href="">职业课程</a></li>
+          <li><a href="">论坛</a></li>
+          <li><a href="">移动APP</a></li>
+        </ul>
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <i class="v5-icon v5-icon-search"></i>
+            <input type="text" class="form-control" id="search" placeholder="搜索你感兴趣的课程">
+          </div>
+          <div class="search-dp" id="hotkeyword">
+            <!--推荐关键词-->
+            <div class="hotkeyword">
+              <h4>推荐搜索关键词</h4>
+              <ul class="cf">
+                  {% block search-key %}
+                  {% endblock %}
+              </ul>
+            </div>
+          </div>
+          <div class="search-dp" id="keyword-group">
+            <!--搜索结果-->
+            <div class="keyword-group">
+              <dl>
+                <dt>职业课程</dt>
+                <dd>
+                  <div><span style="background-color:#A8C310;"><img src="{% static 'images/course/android.png' %}"></span><a href="">Android应用开发工程</a></div>
+                  <div><span style="background-color:#5184CF;"><img src="{% static 'images/course/android.png' %}"></span><a href="">Android架构设计师</a></div>
+                  <div><span style="background-color:#5DB836;"><img src="{% static 'images/course/android.png' %}"></span><a href="">Android的层嵌入式工</a></div>
+                </dd>
+              </dl>
+              <dl>
+                <dt>课程</dt>
+                <dd>
+                  <div><span style="background-color:#A8C310;"><img src="{% static 'images/course/android.png' %}"></span><a href="">Android应用开发工程</a></div>
+                  <div><span style="background-color:#5184CF;"><img src="{% static 'images/course/android.png' %}"></span><a href="">Android架构设计师</a></div>
+                  <div><span style="background-color:#5DB836;"><img src="{% static 'images/course/android.png' %}"></span><a href="">Android的层嵌入式工</a></div>
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </form>
+        <div class="v5-topbar-login">
+
+          <div class="v5-topbar-login-off">
+              {% if user %}
+            <a href="#" data-toggle="modal" data-target="#loginModal">{{user.username}}</a>
+            {% else %}
+               <a href="#" data-toggle="modal" data-target="#loginModal">登录</a>
+              {% endif %}
+          </div>
+            <div class="v5-topbar-login-on" style="display:none;">
+            <!--这里是登录后的内容-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+    {% endblock %}
+    {% block content %}
+    {% block con-nav %}
+    {% endblock %}
+    {% endblock %}
+    {% block footer %}
+  <div class="v5-footer">
+    <div class="container">
+      <div class="v5-footer-container">
+        <div class="v5-footer-bottom">
+          <p>© 2012-2014 maiziedu.com | 服务条款 | 蜀ICP备13014270号-4 Version 4.0.1 release20140721.1</p>
+        </div>
+      </div>
+    </div>
+  </div>
+    {% endblock %}
+</div>
+{% include "login.html" %}
+{% include "resetpass.html" %}
+{% include "register.html" %}
+{% block extend %}
+{% endblock %}
+{% block ext-js %}
+{% endblock %}
+{% endblock %}
+</body>
+</html>
